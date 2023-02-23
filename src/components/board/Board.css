@@ -1,0 +1,24 @@
+.board-container {
+  border: 1px solid #8864ca;
+  padding: 1rem;
+}
+
+.board-tile-input {
+  border: 1px solid #FFFFFF;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  font-size: 28px;
+}
+.board-tile-input:hover {
+  background-color: rgb(122, 122, 122);
+}
+
+.board-tile-selected {
+  border: 1px solid #FFFFFF;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  font-size: 28px;
+  background-color: aqua;
+}
