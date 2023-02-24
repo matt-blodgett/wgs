@@ -14,7 +14,6 @@ function Controls (props: ControlsProps) {
   const [maxLength, setMaxLength] = React.useState<number>(3);
   const [noLengthConstraints, setNoLengthConstraints] = React.useState<boolean>(false);
 
-
   const startSolving = () : void => {
     props.onStartSolving(minLength, maxLength);
   };
@@ -47,12 +46,22 @@ function Controls (props: ControlsProps) {
     <div className='controls-container'>
 
       <div className='controls-section1'>
-        <button className='controls-button' onClick={() => startSolving()} disabled={props.appState != 'ready'}>Solve</button>
-        <button className='controls-button' onClick={() => resetState()} disabled={props.appState == 'working'}>Reset</button>
+        <button
+          className='controls-button'
+          onClick={() => startSolving()}
+          disabled={props.appState != 'ready'}
+        >Solve
+        </button>
+        <button
+          className='controls-button'
+          onClick={() => resetState()}
+          disabled={props.appState == 'working'}
+        >Reset
+        </button>
       </div>
 
       <div className='controls-section2'>
-        <div className='controls-section-title'>Limit Word Length</div>
+        <div className='controls-section-title'>Limit Word Lengths</div>
 
         <div>
           <label className='controls-combobox-label'>Minimum:</label>

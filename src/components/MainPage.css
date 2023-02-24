@@ -1,5 +1,7 @@
 .mainpage-container {
   border: 1px solid #FFFFFF;
+  background-color: #4b4b4b;
+  border-radius: 12px;
 }
 
 .row {

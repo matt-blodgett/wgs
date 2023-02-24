@@ -1,15 +1,14 @@
 import React from 'react';
 
-import Board from './board/Board';
-import WordList from './wordList/WordList';
-import Controls from './controls/Controls';
+import Board from '~/components/board/Board';
+import WordList from '~/components/wordList/WordList';
+import Controls from '~/components/controls/Controls';
+
+import Point from '~/utils/Point'
 
 import './MainPage.css'
 
 
-import Point from '../utils/Point';
-// import BoardAnalyzer from '../utils/BoardAnalyzer';
-// import WordValidator from '../utils/WordValidator';
 
 
 const BOARD_SIZE : number = 4;
@@ -21,13 +20,13 @@ const DEFAULT_LETTERS : Array<Array<string>> = [
 ];
 
 
-// const APP_STATES = [
-//   "initial",
-//   "invalid",
-//   "ready",
-//   "working",
-//   "finished"
-// ]
+const APP_STATES = [
+  "initial",
+  "invalid",
+  "ready",
+  "working",
+  "finished"
+]
 
 
 function MainPage () {
