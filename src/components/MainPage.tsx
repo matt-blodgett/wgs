@@ -2,6 +2,7 @@ import React from 'react';
 
 import Board from '~/components/board/Board';
 import WordList from '~/components/wordList/WordList';
+import Progress from '~/components/progress/Progress';
 import Controls from '~/components/controls/Controls';
 
 import Point from '~/utils/Point';
@@ -61,7 +62,7 @@ function MainPage () {
     setWordPointsMap(newWordPointsMap);
 
     setAppState('finished');
-  }
+  };
 
   const startSolving = (minLength: number, maxLength: number) : void => {
     setAppState('working');
@@ -78,7 +79,7 @@ function MainPage () {
     }
 
     runWorker(params);
-  }
+  };
 
   const resetState = () : void => {
     setWordList([]);
@@ -127,8 +128,18 @@ function MainPage () {
     }
   };
 
+  const test = () : void => {
+    if (appState == 'working') {
+      setAppState('finished');
+    } else {
+      setAppState('working');  
+    }
+  };
+
   return (
     <div className='mainpage-container'>
+
+      <button onClick={() => test()}>Test</button>
 
       <div className='row'>
         <div className='column'>
@@ -148,6 +159,18 @@ function MainPage () {
           />
         </div>
       </div>
+
+      {
+        (appState == 'working' || appState == 'finished') &&
+        <div className='row'>
+          <div className='column'>
+            <Progress
+              appState={appState}
+            />
+          </div>
+        </div>
+      }
+
       <div className='row'>
         <div className='column'>
           <Controls
