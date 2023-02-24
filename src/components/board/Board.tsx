@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Point from '~/utils/Point'
+import Point from '~/utils/Point';
 
 import './Board.css';
  
@@ -18,11 +18,11 @@ function Board (props : BoardProps) {
   React.useEffect(() => {
     setTileLetters(props.defaultLetters);
     props.onTileLettersChanged(props.defaultLetters);
-  }, [props.defaultLetters])
+  }, [props.defaultLetters]);
 
   const isTileSelected = (x: number, y: number) : boolean => {
     for (let i = 0; i < props.selectedPoints.length; i++) {
-      let point: Point = props.selectedPoints[i];
+      const point: Point = props.selectedPoints[i];
       if (point.x == x && point.y == y) {
         return true;
       }
@@ -31,7 +31,7 @@ function Board (props : BoardProps) {
   };
 
   const onTileValueChanged = (event : React.ChangeEvent<HTMLInputElement>, x : number, y : number) : void => {
-    let newValue = event.target.value.toUpperCase();
+    const newValue = event.target.value.toUpperCase();
     if (!'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.includes(newValue)) {
       return;
     }
@@ -56,7 +56,7 @@ function Board (props : BoardProps) {
       }
     }
 
-    let elementId = `board-tile-${xNext}-${yNext}`;
+    const elementId = `board-tile-${xNext}-${yNext}`;
     document.getElementById(elementId)?.focus();
   };
 

@@ -18,7 +18,7 @@ class BoardAnalyzer {
     const x: number = point.x;
     const y: number = point.y;
 
-    let pointNeighbours: Array<Point> = [
+    const pointNeighbours = [
       new Point(x + 0, y + 1),
       new Point(x + 0, y - 1),
       new Point(x + 1, y + 0),
@@ -34,10 +34,10 @@ class BoardAnalyzer {
       if (p.x >= 0 && p.y >= 0 && p.x < this.boardSize && p.y < this.boardSize) {
         validPointNeighbours.push(p);
       }
-    })
+    });
 
     return validPointNeighbours;
-  }
+  };
 
   private isPointInPointList(points: Array<Point>, point: Point) : boolean {
     for (let i = 0; i < points.length; i++) {
@@ -47,7 +47,7 @@ class BoardAnalyzer {
       }
     }
     return false;
-  }
+  };
 
   private getPointCombinationsAt(startPoint: Point, depth: number) : Array<Array<Point>> {
     let pointCombinations: Array<Array<Point>> = [];
@@ -67,8 +67,8 @@ class BoardAnalyzer {
 
           pointCombinations.push(pointCombination);
         }
-      })
-    })
+      });
+    });
 
     let currentDepthPoints: Array<Array<Point>> = [...pointCombinations];
 
@@ -84,18 +84,18 @@ class BoardAnalyzer {
             pointCombination.push(childNeighbour);
             depthPoints.push(pointCombination);
           }
-        })
-      })
+        });
+      });
 
       depthPoints.forEach((pointCombination: Array<Point>) => {
         pointCombinations.push(pointCombination);
-      })
+      });
 
       currentDepthPoints = [...depthPoints];
     }
 
     return pointCombinations;
-  }
+  };
 
   private getAllPointCombinations(depth: number) : Array<Array<Point>> {
     let allPointCombinations: Array<Array<Point>> = [];
@@ -105,12 +105,12 @@ class BoardAnalyzer {
         let startPoint: Point = new Point(x, y);
         this.getPointCombinationsAt(startPoint, depth).forEach((pointCombination: Array<Point>) => {
           allPointCombinations.push(pointCombination);
-        })
+        });
       }
     }
 
     return allPointCombinations;
-  }
+  };
 
   private pointsToString(points: Array<Point>) : string {
     let str: string = '';
@@ -118,7 +118,7 @@ class BoardAnalyzer {
       str += this.getLetterAt(point);
     })
     return str;
-  }
+  };
 
   public getValidStringPointMap(minLength: number, maxLength: number) : Map<string, Array<Point>> {
     let validStringPointMap: Map<string, Array<Point>> = new Map<string, Array<Point>>();
@@ -128,10 +128,10 @@ class BoardAnalyzer {
         let key: string = this.pointsToString(pointCombination);
         validStringPointMap.set(key, pointCombination);
       }
-    })
+    });
 
     return validStringPointMap;
-  }
+  };
 };
 
 export default BoardAnalyzer;

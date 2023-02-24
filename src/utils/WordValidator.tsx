@@ -3,8 +3,7 @@ const wordlist = wordlistJson as Array<string>;
 
 
 class WordValidator {
-  public constructor() {
-  };
+  public constructor() {};
 
   public getValidWords(rawStrings : Array<string>) : Array<string> {
     let validWords: Array<string> = [];
@@ -22,12 +21,12 @@ class WordValidator {
     }
 
     return validWords;
-  }
+  };
 
   public sortWords(words : Array<string>) : void {
     words.sort((a, b) => a > b ? 1 : -1);
     words.sort((a, b) => b.length - a.length);
-  }
-}
+  };
+};
 
 export default WordValidator;

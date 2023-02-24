@@ -4,33 +4,29 @@ import Board from '~/components/board/Board';
 import WordList from '~/components/wordList/WordList';
 import Controls from '~/components/controls/Controls';
 
-import Point from '~/utils/Point'
+import Point from '~/utils/Point';
 
-import './MainPage.css'
-
-
+import './MainPage.css';
 
 
-const BOARD_SIZE : number = 4;
-const DEFAULT_LETTERS : Array<Array<string>> = [
+const BOARD_SIZE = 4;
+const DEFAULT_LETTERS = [
   ['A', 'B', 'C', 'D'],
   ['E', 'F', 'G', 'H'],
   ['I', 'J', 'K', 'L'],
   ['M', 'N', 'O', 'P']
 ];
-
-
 const APP_STATES = [
-  "initial",
-  "invalid",
-  "ready",
-  "working",
-  "finished"
-]
+  'initial',
+  'invalid',
+  'ready',
+  'working',
+  'finished'
+];
 
 
 function MainPage () {
-  const [appState, setAppState] = React.useState<string>("initial");
+  const [appState, setAppState] = React.useState<string>('initial');
 
   const [wordList, setWordList] = React.useState<Array<string>>([]);
   const [wordPointsMap, setWordPointsMap] = React.useState<Map<string, Array<Point>>>(new Map<string, Array<Point>>());
@@ -53,9 +49,9 @@ function MainPage () {
 
     console.log(time);
 
-    let newWordPointsMap: Map<string, Array<Point>> = new Map<string, Array<Point>>();
+    let newWordPointsMap = new Map<string, Array<Point>>();
     validWords.forEach((word: string) => {
-      let points: Array<Point> | undefined = boardStringPointMap.get(word);
+      const points: Array<Point> | undefined = boardStringPointMap.get(word);
       if (points) {
         newWordPointsMap.set(word, points);
       }
@@ -64,11 +60,11 @@ function MainPage () {
     setWordList(validWords);
     setWordPointsMap(newWordPointsMap);
 
-    setAppState("finished");
+    setAppState('finished');
   }
 
   const startSolving = (minLength: number, maxLength: number) : void => {
-    setAppState("working");
+    setAppState('working');
 
     setWordList([]);
     setWordPointsMap(new Map<string, Array<Point>>());
@@ -89,7 +85,7 @@ function MainPage () {
     setWordPointsMap(new Map<string, Array<Point>>());
     setSelectedWordPoints([]);
 
-    const newTileLetters : Array<Array<string>> = [
+    const newTileLetters = [
       ['', '', '', ''],
       ['', '', '', ''],
       ['', '', '', ''],
@@ -98,20 +94,20 @@ function MainPage () {
     setTileLetters(newTileLetters);
     setDefaultTileLetters(newTileLetters);
 
-    setAppState("initial");
-  }
+    setAppState('initial');
+  };
 
   const selectedWordChanged = (word: string) : void => {
-    let points: Array<Point> | undefined = wordPointsMap.get(word);
+    const points: Array<Point> | undefined = wordPointsMap.get(word);
     if (points) {
       setSelectedWordPoints(points);
     }
-  }
+  };
 
   const tileLettersChanged = (tileLetters: Array<Array<string>>) : void => {
     setTileLetters(tileLetters);
 
-    let isBoardValid: boolean = true;
+    let isBoardValid = true;
     for (let x = 0; x < BOARD_SIZE; x++) {
       for (let y = 0; y < BOARD_SIZE; y++) {
         if (!tileLetters[x][y]) {
@@ -129,7 +125,7 @@ function MainPage () {
     } else {
       setAppState('invalid');
     }
-  }
+  };
 
   return (
     <div className='mainpage-container'>
