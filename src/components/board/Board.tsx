@@ -6,18 +6,18 @@ import './Board.css';
 
 
 type BoardProps = {
-  appState: string,
-  boardSize: number,
-  defaultLetters: Array<Array<string>>,
-  selectedPoints: Array<Point>,
-  onTileLettersChanged: (tileLetters : Array<Array<string>>) => void
+  appState: string;
+  boardSize: number;
+  defaultLetters: Array<Array<string>>;
+  selectedPoints: Array<Point>;
+  onTileLettersChanged: (tileLetters : Array<Array<string>>) => void;
 };
 function Board (props : BoardProps) {
   const [tileLetters, setTileLetters] = React.useState<Array<Array<string>>>(props.defaultLetters);
 
   React.useEffect(() => {
     setTileLetters(props.defaultLetters);
-    // props.onTileLettersChanged(props.defaultLetters);
+    props.onTileLettersChanged(props.defaultLetters);
   }, [props.defaultLetters]);
 
   const isTileSelected = (x: number, y: number) : boolean => {

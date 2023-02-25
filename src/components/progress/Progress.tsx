@@ -6,29 +6,41 @@ import iconCheckmark from '~/assets/checkmark.svg'
 import './Progress.css';
 
 
-const INITIAL_PROGRESS_BAR_STATE = {
-  value: 0,
-  max: 100,
-  percentLabel: '0%',
-  statusLabel: 'Solving Board...'
-}
+// const INITIAL_PROGRESS_BAR_STATE = {
+//   value: 0,
+//   max: 100,
+//   percentLabel: '0%',
+//   statusLabel: 'Solving Board...'
+// }
 
 
 type ProgressProps = {
-  appState: string,
-  solvingState: any
+  appState: string;
+  solvingState: any;
 };
 function Progress (props : ProgressProps) {
-  // Should create interface instead of passing "any"
-  const [progressBarValues, setProgressBarValues] = React.useState<any>(INITIAL_PROGRESS_BAR_STATE);
 
-  // const refProgressBar = React.createRef<HTMLProgressElement>();
+  const getTextProgressLabelTitle = () : string => {
+    const stage = props.solvingState.stage;
+    if (props.appState == 'finished') {
+      return 'Completed';
+    } else {
+      if (!stage) {
+        return 'Solving Board...';
+      } else if (stage == 'board') {
+        return 'BOARD';
+      } else if (stage == 'validator') {
+        return 'Finding valid words';
+      }
+    }
+    return '';
+  };
 
-  const test = () : void => {
-    const newProgressBarValues = {...progressBarValues};
-    newProgressBarValues.value = newProgressBarValues.value + 10;
-    newProgressBarValues.percentLabel = `${newProgressBarValues.max / newProgressBarValues.value}%`
-    setProgressBarValues(newProgressBarValues);
+  const getTextProgressLabelPercentComplete = () : string => {
+    const max = props.solvingState.countFound;
+    const value = props.solvingState.countChecked;
+    const percentComplete = (value / max) * 100;
+    return `${percentComplete.toFixed(0)}%`;
   };
 
   return (
@@ -46,12 +58,12 @@ function Progress (props : ProgressProps) {
       </div>
 
       <div className='progress-section2'>
-        <label>{progressBarValues.statusLabel}
+        <label>{getTextProgressLabelTitle()}
           <progress
-            value={progressBarValues.value}
-            max={progressBarValues.max}
-          >{progressBarValues.percentLabel}
-          </progress>
+            max={props.solvingState.countFound}
+            value={props.solvingState.countChecked}
+          />
+          {getTextProgressLabelPercentComplete()}
         </label>
       </div>
 
@@ -61,7 +73,6 @@ function Progress (props : ProgressProps) {
         <div>{props.solvingState.countFound}</div>
         <div>{props.solvingState.countChecked}</div>
         <div>{props.solvingState.countValid}</div>
-        <button onClick={() => test()}>Test</button>
       </div>
 
     </div>

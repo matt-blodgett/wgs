@@ -131,6 +131,8 @@ class BoardAnalyzer {
   {
     const validStringPointMap = new Map<string, Array<Point>>();
 
+    progressUpdates.callback(0);
+
     this.getAllPointCombinations(maxLength).forEach((pointCombination) => {
       if (pointCombination.length >= minLength) {
         const key = this.pointsToString(pointCombination);

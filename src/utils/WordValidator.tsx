@@ -13,7 +13,7 @@ class WordValidator {
     }
   ) : Array<string>
   {
-    let validWords = [];
+    const validWords = [];
 
     progressUpdates.callback(0, 0);
 

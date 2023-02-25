@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Board from '~/components/board/Board';
 import WordList from '~/components/wordList/WordList';
@@ -38,6 +38,7 @@ const DEFAULT_SOLVING_STATE = {
 function MainPage () {
   const [appState, setAppState] = React.useState<string>('initial');
 
+    // Should create type instead of passing "any"
   const [solvingState, setSolvingState] = React.useState<any>(DEFAULT_SOLVING_STATE);
 
   const [wordList, setWordList] = React.useState<Array<string>>([]);
@@ -51,26 +52,13 @@ function MainPage () {
   const onWorkerEvent = (worker : Worker, event : MessageEvent) : void => {
     const { status, data } = event.data;
 
-    const newSolvingState = {...solvingState};
-
-    newSolvingState.status = status;
-
     if (status == 'working') {
-      if (data.stage == 'board') {
-        newSolvingState.stage = data.stage;
-        newSolvingState.countFound = data.countFound;
-      } else if (data.stage == 'validator') {
-        newSolvingState.stage = data.stage;
-        newSolvingState.countChecked = data.countChecked;
-        newSolvingState.countValid = data.countValid;
-      }
+      // const newSolvingState = {status: status, ...data}
+      setSolvingState(data);
     } else if (status == 'done') {
-      newSolvingState.stage = null;
       worker.terminate()
+      finishSolving(data);
     }
-
-    setSolvingState(newSolvingState);
-    finishSolving(data);
   };
 
   const runWorker = (params: object) : void => {
@@ -85,13 +73,13 @@ function MainPage () {
   };
 
   const finishSolving = (data: any) : void => {
-    const { validWords, boardStringPointMap, time } = data;
+    const { validWords, boardStringPointMap, elapsedTime } = data;
 
-    console.log(time);
+    console.log(`finishSolving: elapsedTime=${elapsedTime}`);
 
     const newWordPointsMap = new Map<string, Array<Point>>();
     validWords.forEach((word: string) => {
-      const points: Array<Point> | undefined = boardStringPointMap.get(word);
+      const points = boardStringPointMap.get(word) || null;
       if (points) {
         newWordPointsMap.set(word, points);
       }
@@ -139,7 +127,7 @@ function MainPage () {
   };
 
   const selectedWordChanged = (word: string) : void => {
-    const points: Array<Point> | undefined = wordPointsMap.get(word);
+    const points = wordPointsMap.get(word) || null;
     if (points) {
       setSelectedWordPoints(points);
     }

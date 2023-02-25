@@ -10,25 +10,31 @@ onmessage = (event) => {
 
   const { boardSize, tileLetters, minLength, maxLength } = event.data;
 
-  const onBoardProgress = (countFound) => {
+  const progressData = {
+    countFound: 0,
+    countChecked: 0,
+    countValid: 0
+  }
+
+  const emitProgressData = (stage) => {
     postMessage({
       status: 'working',
       data: {
-        stage: 'board',
-        countFound: countFound
+        stage: stage,
+        ...progressData
       }
     });
   };
 
+  const onBoardProgress = (countFound) => {
+    progressData.countFound = countFound;
+    emitProgressData('board')
+  };
+
   const onValidatorProgress = (countChecked, countValid) => {
-    postMessage({
-      status: 'working',
-      data: {
-        stage: 'validator',
-        countChecked: countChecked,
-        countValid: countValid
-      }
-    });
+    progressData.countChecked = countChecked;
+    progressData.countValid = countValid;
+    emitProgressData('validator');
   };
 
   const boardProgressUpdates = {
@@ -54,7 +60,7 @@ onmessage = (event) => {
     data: {
       validWords: validWords,
       boardStringPointMap: boardStringPointMap,
-      time: new Date().getTime() - startTime,
+      elapsedTime: new Date().getTime() - startTime,
     }
   });
 };

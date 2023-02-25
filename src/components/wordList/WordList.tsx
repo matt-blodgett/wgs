@@ -4,9 +4,9 @@ import './WordList.css';
 
 
 type WordListProps = {
-  appState: string,
-  wordList: Array<string>,
-  onSelectedWordChanged: (word: string) => void
+  appState: string;
+  wordList: Array<string>;
+  onSelectedWordChanged: (word: string) => void;
 };
 function WordList (props : WordListProps) {
 
@@ -24,7 +24,7 @@ function WordList (props : WordListProps) {
           })
         }
       </select>
-    
+
     </div>
   );
 };

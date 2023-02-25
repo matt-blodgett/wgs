@@ -4,10 +4,10 @@ import './Controls.css';
 
 
 type ControlsProps = {
-  appState: string,
-  boardSize: number,
-  onStartSolving: (minLength : number, maxLength : number) => void,
-  onResetState: () => void
+  appState: string;
+  boardSize: number;
+  onStartSolving: (minLength : number, maxLength : number) => void;
+  onResetState: () => void;
 };
 function Controls (props: ControlsProps) {
   const [minLength, setMinLength] = React.useState<number>(0);
