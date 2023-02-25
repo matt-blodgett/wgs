@@ -1,5 +1,5 @@
 import Point from '~/utils/Point';
- 
+
 
 class BoardAnalyzer {
   private boardSize: number;
@@ -15,8 +15,8 @@ class BoardAnalyzer {
   };
 
   private getPointNeighbours(point: Point) : Array<Point> {
-    const x: number = point.x;
-    const y: number = point.y;
+    const x = point.x;
+    const y = point.y;
 
     const pointNeighbours = [
       new Point(x + 0, y + 1),
@@ -29,8 +29,8 @@ class BoardAnalyzer {
       new Point(x - 1, y - 1)
     ];
 
-    let validPointNeighbours: Array<Point> = [];
-    pointNeighbours.forEach((p: Point) => {
+    const validPointNeighbours = new Array<Point>;
+    pointNeighbours.forEach((p) => {
       if (p.x >= 0 && p.y >= 0 && p.x < this.boardSize && p.y < this.boardSize) {
         validPointNeighbours.push(p);
       }
@@ -41,7 +41,7 @@ class BoardAnalyzer {
 
   private isPointInPointList(points: Array<Point>, point: Point) : boolean {
     for (let i = 0; i < points.length; i++) {
-      let p = points[i];
+      const p = points[i];
       if (p.x == point.x && p.y == point.y) {
         return true;
       }
@@ -50,12 +50,12 @@ class BoardAnalyzer {
   };
 
   private getPointCombinationsAt(startPoint: Point, depth: number) : Array<Array<Point>> {
-    let pointCombinations: Array<Array<Point>> = [];
+    const pointCombinations = new Array<Array<Point>>;
 
-    this.getPointNeighbours(startPoint).forEach((startPointNeighbour: Point) => {
-      this.getPointNeighbours(startPointNeighbour).forEach((childNeighbour: Point) => {
+    this.getPointNeighbours(startPoint).forEach((startPointNeighbour) => {
+      this.getPointNeighbours(startPointNeighbour).forEach((childNeighbour) => {
         if (!(childNeighbour.x == startPoint.x && childNeighbour.y == startPoint.y)) {
-          let pointCombination: Array<Point> = [];
+          const pointCombination = [];
           pointCombination.push(startPoint);
 
           if (depth > 1) {
@@ -70,24 +70,24 @@ class BoardAnalyzer {
       });
     });
 
-    let currentDepthPoints: Array<Array<Point>> = [...pointCombinations];
+    let currentDepthPoints = [...pointCombinations];
 
     for (let i = 0; i < depth - 3; i++) {
-      let depthPoints: Array<Array<Point>> = [];
+      const depthPoints = new Array<Array<Point>>;
 
-      currentDepthPoints.forEach((points: Array<Point>) => {
-        let lastPoint: Point = points[points.length - 1];
+      currentDepthPoints.forEach((points) => {
+        const lastPoint = points[points.length - 1];
 
-        this.getPointNeighbours(lastPoint).forEach((childNeighbour: Point) => {
+        this.getPointNeighbours(lastPoint).forEach((childNeighbour) => {
           if (!this.isPointInPointList(points, childNeighbour)) {
-            let pointCombination: Array<Point> = [...points];
+            let pointCombination = [...points];
             pointCombination.push(childNeighbour);
             depthPoints.push(pointCombination);
           }
         });
       });
 
-      depthPoints.forEach((pointCombination: Array<Point>) => {
+      depthPoints.forEach((pointCombination) => {
         pointCombinations.push(pointCombination);
       });
 
@@ -98,12 +98,12 @@ class BoardAnalyzer {
   };
 
   private getAllPointCombinations(depth: number) : Array<Array<Point>> {
-    let allPointCombinations: Array<Array<Point>> = [];
+    let allPointCombinations = new Array<Array<Point>>;
 
     for (let x = 0; x < this.boardSize; x++) {
       for (let y = 0; y < this.boardSize; y++) {
-        let startPoint: Point = new Point(x, y);
-        this.getPointCombinationsAt(startPoint, depth).forEach((pointCombination: Array<Point>) => {
+        const startPoint = new Point(x, y);
+        this.getPointCombinationsAt(startPoint, depth).forEach((pointCombination) => {
           allPointCombinations.push(pointCombination);
         });
       }
@@ -113,23 +113,39 @@ class BoardAnalyzer {
   };
 
   private pointsToString(points: Array<Point>) : string {
-    let str: string = '';
-    points.forEach((point: Point) => {
+    let str = '';
+    points.forEach((point) => {
       str += this.getLetterAt(point);
     })
     return str;
   };
 
-  public getValidStringPointMap(minLength: number, maxLength: number) : Map<string, Array<Point>> {
-    let validStringPointMap: Map<string, Array<Point>> = new Map<string, Array<Point>>();
+  public getValidStringPointMap(
+    minLength: number,
+    maxLength: number,
+    progressUpdates = {
+      callback: (countFound: number) => {},
+      frequency: -1
+    }
+  ) : Map<string, Array<Point>>
+  {
+    const validStringPointMap = new Map<string, Array<Point>>();
 
-    this.getAllPointCombinations(maxLength).forEach((pointCombination: Array<Point>) => {
+    this.getAllPointCombinations(maxLength).forEach((pointCombination) => {
       if (pointCombination.length >= minLength) {
-        let key: string = this.pointsToString(pointCombination);
+        const key = this.pointsToString(pointCombination);
         validStringPointMap.set(key, pointCombination);
+
+        if (progressUpdates.frequency > 0) {
+          const count = validStringPointMap.size;
+          if ((count % progressUpdates.frequency) == 0) {
+            progressUpdates.callback(count);
+          }
+        }
       }
     });
 
+    progressUpdates.callback(validStringPointMap.size);
     return validStringPointMap;
   };
 };

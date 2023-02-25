@@ -3,7 +3,7 @@ import React from 'react';
 import Point from '~/utils/Point';
 
 import './Board.css';
- 
+
 
 type BoardProps = {
   appState: string,
@@ -17,7 +17,7 @@ function Board (props : BoardProps) {
 
   React.useEffect(() => {
     setTileLetters(props.defaultLetters);
-    props.onTileLettersChanged(props.defaultLetters);
+    // props.onTileLettersChanged(props.defaultLetters);
   }, [props.defaultLetters]);
 
   const isTileSelected = (x: number, y: number) : boolean => {
@@ -36,7 +36,7 @@ function Board (props : BoardProps) {
       return;
     }
 
-    let newLetters = [...tileLetters];
+    const newLetters = [...tileLetters];
     newLetters[x][y] = newValue;
     setTileLetters(newLetters);
     props.onTileLettersChanged(newLetters);
@@ -44,7 +44,7 @@ function Board (props : BoardProps) {
     // Tab to next tile
     let xNext = x;
     let yNext = y;
-  
+
     if (y + 1 < props.boardSize) {
       yNext = y + 1;
     } else {

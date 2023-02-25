@@ -15,7 +15,8 @@ const INITIAL_PROGRESS_BAR_STATE = {
 
 
 type ProgressProps = {
-  appState: string
+  appState: string,
+  solvingState: any
 };
 function Progress (props : ProgressProps) {
   // Should create interface instead of passing "any"
@@ -24,7 +25,7 @@ function Progress (props : ProgressProps) {
   // const refProgressBar = React.createRef<HTMLProgressElement>();
 
   const test = () : void => {
-    let newProgressBarValues = {...progressBarValues};
+    const newProgressBarValues = {...progressBarValues};
     newProgressBarValues.value = newProgressBarValues.value + 10;
     newProgressBarValues.percentLabel = `${newProgressBarValues.max / newProgressBarValues.value}%`
     setProgressBarValues(newProgressBarValues);
@@ -55,7 +56,11 @@ function Progress (props : ProgressProps) {
       </div>
 
       <div className='progress-section3'>
-        <div>{`Test Progress -> ${props.appState}`}</div>
+        <div>{props.solvingState.status}</div>
+        <div>{props.solvingState.stage}</div>
+        <div>{props.solvingState.countFound}</div>
+        <div>{props.solvingState.countChecked}</div>
+        <div>{props.solvingState.countValid}</div>
         <button onClick={() => test()}>Test</button>
       </div>
 

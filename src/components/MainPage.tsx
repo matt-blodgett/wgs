@@ -26,31 +26,70 @@ const APP_STATES = [
 ];
 
 
+const DEFAULT_SOLVING_STATE = {
+  status: 'initial',
+  stage: null,
+  countFound: 0,
+  countChecked: 0,
+  countValid: 0
+};
+
+
 function MainPage () {
   const [appState, setAppState] = React.useState<string>('initial');
 
+  const [solvingState, setSolvingState] = React.useState<any>(DEFAULT_SOLVING_STATE);
+
   const [wordList, setWordList] = React.useState<Array<string>>([]);
   const [wordPointsMap, setWordPointsMap] = React.useState<Map<string, Array<Point>>>(new Map<string, Array<Point>>());
+
   const [selectedWordPoints, setSelectedWordPoints] = React.useState<Array<Point>>([]);
+
   const [tileLetters, setTileLetters] = React.useState<Array<Array<string>>>(DEFAULT_LETTERS);
   const [defaultTileLetters, setDefaultTileLetters] = React.useState<Array<Array<string>>>(DEFAULT_LETTERS);
+
+  const onWorkerEvent = (worker : Worker, event : MessageEvent) : void => {
+    const { status, data } = event.data;
+
+    const newSolvingState = {...solvingState};
+
+    newSolvingState.status = status;
+
+    if (status == 'working') {
+      if (data.stage == 'board') {
+        newSolvingState.stage = data.stage;
+        newSolvingState.countFound = data.countFound;
+      } else if (data.stage == 'validator') {
+        newSolvingState.stage = data.stage;
+        newSolvingState.countChecked = data.countChecked;
+        newSolvingState.countValid = data.countValid;
+      }
+    } else if (status == 'done') {
+      newSolvingState.stage = null;
+      worker.terminate()
+    }
+
+    setSolvingState(newSolvingState);
+    finishSolving(data);
+  };
 
   const runWorker = (params: object) : void => {
     const worker = new Worker('./worker.tsx', { type: 'module' });
     worker.postMessage(params);
-    worker.onerror = (err) => console.log(err);
+    worker.onerror = (err) => {
+      console.log(err);
+    };
     worker.onmessage = (event) => {
-      finishSolving(event);
-      worker.terminate();
+      onWorkerEvent(worker, event);
     };
   };
 
-  const finishSolving = (event: any) : void => {
-    const { validWords, boardStringPointMap, time } = event.data;
+  const finishSolving = (data: any) : void => {
+    const { validWords, boardStringPointMap, time } = data;
 
     console.log(time);
 
-    let newWordPointsMap = new Map<string, Array<Point>>();
+    const newWordPointsMap = new Map<string, Array<Point>>();
     validWords.forEach((word: string) => {
       const points: Array<Point> | undefined = boardStringPointMap.get(word);
       if (points) {
@@ -70,7 +109,7 @@ function MainPage () {
     setWordList([]);
     setWordPointsMap(new Map<string, Array<Point>>());
     setSelectedWordPoints([]);
-  
+
     const params = {
       boardSize: BOARD_SIZE,
       tileLetters: tileLetters,
@@ -95,6 +134,7 @@ function MainPage () {
     setTileLetters(newTileLetters);
     setDefaultTileLetters(newTileLetters);
 
+    setSolvingState(DEFAULT_SOLVING_STATE);
     setAppState('initial');
   };
 
@@ -128,18 +168,8 @@ function MainPage () {
     }
   };
 
-  const test = () : void => {
-    if (appState == 'working') {
-      setAppState('finished');
-    } else {
-      setAppState('working');  
-    }
-  };
-
   return (
     <div className='mainpage-container'>
-
-      <button onClick={() => test()}>Test</button>
 
       <div className='row'>
         <div className='column'>
@@ -166,6 +196,7 @@ function MainPage () {
           <div className='column'>
             <Progress
               appState={appState}
+              solvingState={solvingState}
             />
           </div>
         </div>
@@ -181,7 +212,7 @@ function MainPage () {
           />
         </div>
       </div>
-      
+
     </div>
   );
 };

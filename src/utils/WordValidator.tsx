@@ -5,20 +5,39 @@ const wordlist = wordlistJson as Array<string>;
 class WordValidator {
   public constructor() {};
 
-  public getValidWords(rawStrings : Array<string>) : Array<string> {
-    let validWords: Array<string> = [];
+  public getValidWords(
+    rawStrings : Array<string>,
+    progressUpdates = {
+      callback: (countChecked: number, countValid: number) => {},
+      frequency: -1
+    }
+  ) : Array<string>
+  {
+    let validWords = [];
 
-    for (let i = 0; i < wordlist.length; i++) {
-      let validWord: string = wordlist[i];
+    progressUpdates.callback(0, 0);
 
-      for (let j = 0; j < rawStrings.length; j++) {
-        let rawString: string = rawStrings[j];
+    for (let i = 0; i < rawStrings.length; i++) {
+      const rawString = rawStrings[i];
+
+      for (let j = 0; j < wordlist.length; j++) {
+        const validWord = wordlist[j];
         if (rawString == validWord) {
-          validWords.push(rawString);
+          validWords.push(validWord);
           break;
         }
       }
+
+      if (progressUpdates.frequency > 0) {
+        const countChecked = i + 1;
+        if ((countChecked % progressUpdates.frequency) == 0) {
+          const countValid = validWords.length;
+          progressUpdates.callback(countChecked, countValid);
+        }
+      }
     }
+
+    progressUpdates.callback(rawStrings.length, validWords.length);
 
     return validWords;
   };
