@@ -49,11 +49,11 @@ function Progress (props : ProgressProps) {
       <div className='progress-section1'>
         {
           props.appState == 'working' &&
-          <img src={iconSpinner} />
+          <img src={iconSpinner} alt='' />
         }
         {
           props.appState == 'finished' &&
-          <img src={iconCheckmark} className='progress-checkmark' />
+          <img src={iconCheckmark} className='progress-checkmark' alt='' />
         }
       </div>
 
@@ -77,6 +77,6 @@ function Progress (props : ProgressProps) {
 
     </div>
   );
-};
+}
 
 export default Progress;

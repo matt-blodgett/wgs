@@ -3,12 +3,12 @@ const wordlist = wordlistJson as Array<string>;
 
 
 class WordValidator {
-  public constructor() {};
+  public constructor() {}
 
   public getValidWords(
     rawStrings : Array<string>,
     progressUpdates = {
-      callback: (countChecked: number, countValid: number) => {},
+      callback: (countChecked: number, countValid: number) => {countChecked; countValid},
       frequency: -1
     }
   ) : Array<string>
@@ -40,12 +40,12 @@ class WordValidator {
     progressUpdates.callback(rawStrings.length, validWords.length);
 
     return validWords;
-  };
+  }
 
   public sortWords(words : Array<string>) : void {
     words.sort((a, b) => a > b ? 1 : -1);
     words.sort((a, b) => b.length - a.length);
-  };
-};
+  }
+}
 
 export default WordValidator;

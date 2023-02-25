@@ -8,11 +8,11 @@ class BoardAnalyzer {
   public constructor(boardSize: number, boardLetters: Array<Array<string>>) {
     this.boardSize = boardSize;
     this.boardLetters = boardLetters;
-  };
+  }
 
   private getLetterAt(point: Point) : string {
     return this.boardLetters[point.x][point.y];
-  };
+  }
 
   private getPointNeighbours(point: Point) : Array<Point> {
     const x = point.x;
@@ -37,7 +37,7 @@ class BoardAnalyzer {
     });
 
     return validPointNeighbours;
-  };
+  }
 
   private isPointInPointList(points: Array<Point>, point: Point) : boolean {
     for (let i = 0; i < points.length; i++) {
@@ -47,7 +47,7 @@ class BoardAnalyzer {
       }
     }
     return false;
-  };
+  }
 
   private getPointCombinationsAt(startPoint: Point, depth: number) : Array<Array<Point>> {
     const pointCombinations = new Array<Array<Point>>;
@@ -80,7 +80,7 @@ class BoardAnalyzer {
 
         this.getPointNeighbours(lastPoint).forEach((childNeighbour) => {
           if (!this.isPointInPointList(points, childNeighbour)) {
-            let pointCombination = [...points];
+            const pointCombination = [...points];
             pointCombination.push(childNeighbour);
             depthPoints.push(pointCombination);
           }
@@ -95,10 +95,10 @@ class BoardAnalyzer {
     }
 
     return pointCombinations;
-  };
+  }
 
   private getAllPointCombinations(depth: number) : Array<Array<Point>> {
-    let allPointCombinations = new Array<Array<Point>>;
+    const allPointCombinations = new Array<Array<Point>>;
 
     for (let x = 0; x < this.boardSize; x++) {
       for (let y = 0; y < this.boardSize; y++) {
@@ -110,7 +110,7 @@ class BoardAnalyzer {
     }
 
     return allPointCombinations;
-  };
+  }
 
   private pointsToString(points: Array<Point>) : string {
     let str = '';
@@ -118,13 +118,13 @@ class BoardAnalyzer {
       str += this.getLetterAt(point);
     })
     return str;
-  };
+  }
 
   public getValidStringPointMap(
     minLength: number,
     maxLength: number,
     progressUpdates = {
-      callback: (countFound: number) => {},
+      callback: (countFound: number) => {countFound},
       frequency: -1
     }
   ) : Map<string, Array<Point>>
@@ -149,7 +149,7 @@ class BoardAnalyzer {
 
     progressUpdates.callback(validStringPointMap.size);
     return validStringPointMap;
-  };
-};
+  }
+}
 
 export default BoardAnalyzer;

@@ -8,21 +8,15 @@ import './Board.css';
 type BoardProps = {
   appState: string;
   boardSize: number;
-  defaultLetters: Array<Array<string>>;
-  selectedPoints: Array<Point>;
-  onTileLettersChanged: (tileLetters : Array<Array<string>>) => void;
+  tileLetters: Array<Array<string>>;
+  onTileLetterChanged: (x: number, y: number, letter: string) => void;
+  highlightedTiles: Array<Point>;
 };
 function Board (props : BoardProps) {
-  const [tileLetters, setTileLetters] = React.useState<Array<Array<string>>>(props.defaultLetters);
 
-  React.useEffect(() => {
-    setTileLetters(props.defaultLetters);
-    props.onTileLettersChanged(props.defaultLetters);
-  }, [props.defaultLetters]);
-
-  const isTileSelected = (x: number, y: number) : boolean => {
-    for (let i = 0; i < props.selectedPoints.length; i++) {
-      const point: Point = props.selectedPoints[i];
+  const isTileHighlighted = (x: number, y: number) : boolean => {
+    for (let i = 0; i < props.highlightedTiles.length; i++) {
+      const point = props.highlightedTiles[i];
       if (point.x == x && point.y == y) {
         return true;
       }
@@ -31,26 +25,22 @@ function Board (props : BoardProps) {
   };
 
   const onTileValueChanged = (event : React.ChangeEvent<HTMLInputElement>, x : number, y : number) : void => {
-    const newValue = event.target.value.toUpperCase();
-    if (!'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.includes(newValue)) {
+    const value = event.target.value.toUpperCase();
+    if (!'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.includes(value)) {
       return;
     }
 
-    const newLetters = [...tileLetters];
-    newLetters[x][y] = newValue;
-    setTileLetters(newLetters);
-    props.onTileLettersChanged(newLetters);
+    props.onTileLetterChanged(x, y, value);
 
     // Tab to next tile
     let xNext = x;
     let yNext = y;
-
     if (y + 1 < props.boardSize) {
-      yNext = y + 1;
+      yNext += 1;
     } else {
       yNext = 0;
       if (x + 1 < props.boardSize) {
-        xNext = x + 1;
+        xNext += 1;
       } else {
         xNext = 0;
       }
@@ -75,12 +65,12 @@ function Board (props : BoardProps) {
                 Array.from({ length: props.boardSize }, (_, y) => (
                   <input
                     id={`board-tile-${x}-${y}`}
-                    className={isTileSelected(x, y) ? 'board-tile-selected' : 'board-tile-input'}
+                    key={`${x}-${y}`}
+                    className={isTileHighlighted(x, y) ? 'board-tile-selected' : 'board-tile-input'}
                     onChange={(event) => onTileValueChanged(event, x, y)}
                     onClick={onTileClicked}
-                    value={tileLetters[x][y]}
-                    key={`${x}-${y}`}
                     maxLength={1}
+                    value={props.tileLetters[x][y]}
                     disabled={props.appState == 'working' || props.appState == 'finished'}
                   />
                 ))
@@ -92,6 +82,6 @@ function Board (props : BoardProps) {
 
     </div>
   );
-};
+}
 
 export default Board;

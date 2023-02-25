@@ -13,12 +13,16 @@ module.exports = {
     'import/resolver': {
       node: {
         paths: ['src'],
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+      typescript: {
+        paths: ['./tsconfig.json'],
       },
     },
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
-    'react/jsx-no-target-blank': 'off'
-  }
+    'react/jsx-no-target-blank': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
+  },
 };

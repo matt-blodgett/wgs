@@ -50,13 +50,15 @@ function Controls (props: ControlsProps) {
           className='controls-button'
           onClick={() => startSolving()}
           disabled={props.appState != 'ready'}
-        >Solve
+        >
+          Solve
         </button>
         <button
           className='controls-button'
           onClick={() => resetState()}
           disabled={props.appState == 'working'}
-        >Reset
+        >
+          Reset
         </button>
       </div>
 
@@ -64,8 +66,14 @@ function Controls (props: ControlsProps) {
         <div className='controls-section-title'>Limit Word Lengths</div>
 
         <div>
-          <label className='controls-combobox-label'>Minimum:</label>
+          <label
+            className='controls-combobox-label'
+            htmlFor='cbx_minLength'
+          >
+            Minimum:
+          </label>
           <select
+            id='cbx_minLength'
             className='controls-combobox'
             onChange={onMinLengthChanged}
             value={minLength}
@@ -73,15 +81,21 @@ function Controls (props: ControlsProps) {
           >
             {
               Array.from({ length: (props.boardSize * 2) + 1 }, (_, i) => (
-                <option value={i} key={i}>{i}</option>
+                <option key={i} value={i}>{i}</option>
               ))
             }
           </select>
         </div>
 
         <div>
-          <label className='controls-combobox-label'>Maximum:</label>
+          <label
+            className='controls-combobox-label'
+            htmlFor='cbx_maxLength'
+          >
+            Maximum:
+          </label>
           <select
+            id='cbx_maxLength'
             className='controls-combobox'
             onChange={onMaxLengthChanged}
             value={maxLength}
@@ -89,17 +103,20 @@ function Controls (props: ControlsProps) {
           >
             {
               Array.from({ length: (props.boardSize * 2) + 1 }, (_, i) => (
-                <option value={i} key={i}>{i}</option>
+                <option key={i} value={i}>{i}</option>
               ))
             }
           </select>
         </div>
 
         <div>
-          <label>
+          <label
+            htmlFor='chk_noLengthConstraints'
+          >
             <input
-              onChange={onNoLengthContraintsChanged}
+              id='chk_noLengthConstraints'
               type='checkbox'
+              onChange={onNoLengthContraintsChanged}
             />
             Find All Words
           </label>
@@ -109,6 +126,6 @@ function Controls (props: ControlsProps) {
 
     </div>
   );
-};
+}
 
 export default Controls;

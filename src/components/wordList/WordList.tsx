@@ -27,6 +27,6 @@ function WordList (props : WordListProps) {
 
     </div>
   );
-};
+}
 
 export default WordList;
