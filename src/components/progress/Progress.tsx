@@ -6,12 +6,37 @@ import iconCheckmark from '~/assets/checkmark.svg'
 import './Progress.css';
 
 
-// const INITIAL_PROGRESS_BAR_STATE = {
-//   value: 0,
-//   max: 100,
-//   percentLabel: '0%',
-//   statusLabel: 'Solving Board...'
-// }
+type TimeElapsedProps = {
+  working: boolean;
+};
+function TimeElapsed (props : TimeElapsedProps) {
+  const [secondsElapsed, setSecondsElapsed] = React.useState<number>(0);
+  const [secondsTimer, setSecondsTimer] = React.useState<NodeJS.Timer | undefined>(undefined);
+
+  const tick = () : void => {
+    setSecondsElapsed((seconds) => seconds + 1);
+  };
+
+  React.useEffect(() => {
+    const interval = setInterval(tick, 1000);
+    setSecondsTimer(interval);
+    return () => clearInterval(interval);
+  }, []);
+
+  React.useEffect(() => {
+    if (!props.working) {
+      clearInterval(secondsTimer);
+    }
+  }, [props.working])
+
+  const getTextTimeElapsed = () : string => {
+    return new Date(secondsElapsed * 1000).toISOString().slice(11, 19);
+  };
+
+  return (
+    <div>Time Elapsed: {getTextTimeElapsed()}</div>
+  );
+}
 
 
 type ProgressProps = {
@@ -20,7 +45,7 @@ type ProgressProps = {
 };
 function Progress (props : ProgressProps) {
 
-  const getTextProgressLabelTitle = () : string => {
+  const getTextStatusTitle = () : string => {
     const stage = props.solvingState.stage;
     if (props.appState == 'finished') {
       return 'Completed';
@@ -36,11 +61,19 @@ function Progress (props : ProgressProps) {
     return '';
   };
 
-  const getTextProgressLabelPercentComplete = () : string => {
+  const getTextPercentComplete = () : string => {
     const max = props.solvingState.countFound;
     const value = props.solvingState.countChecked;
     const percentComplete = (value / max) * 100;
     return `${percentComplete.toFixed(0)}%`;
+  };
+
+  const getTextCheckedVersusFound = () : string => {
+    return `Checked Strings: ${props.solvingState.countChecked} / ${props.solvingState.countFound}`;
+  };
+
+  const getTextCountValid = () : string => {
+    return `Valid Words: ${props.solvingState.countValid}`;
   };
 
   return (
@@ -53,26 +86,26 @@ function Progress (props : ProgressProps) {
         }
         {
           props.appState == 'finished' &&
-          <img src={iconCheckmark} className='progress-checkmark' alt='' />
+          <img src={iconCheckmark} className='progress-checkmark' alt='' width={200} height={50} />
         }
       </div>
 
       <div className='progress-section2'>
-        <label>{getTextProgressLabelTitle()}
+        <label>{getTextStatusTitle()}
           <progress
             max={props.solvingState.countFound}
             value={props.solvingState.countChecked}
           />
-          {getTextProgressLabelPercentComplete()}
+          {getTextPercentComplete()}
         </label>
       </div>
 
       <div className='progress-section3'>
-        <div>{props.solvingState.status}</div>
-        <div>{props.solvingState.stage}</div>
-        <div>{props.solvingState.countFound}</div>
-        <div>{props.solvingState.countChecked}</div>
-        <div>{props.solvingState.countValid}</div>
+        <TimeElapsed
+          working={props.appState == 'working'}
+        />
+        <div>{getTextCheckedVersusFound()}</div>
+        <div>{getTextCountValid()}</div>
       </div>
 
     </div>

@@ -51,7 +51,6 @@ function MainPage () {
   const [tileLetters, setTileLetters] = React.useState<Array<Array<string>>>(EMPTY_TILE_LETTERS);
   const [selectedWordPoints, setSelectedWordPoints] = React.useState<Array<Point>>([]);
 
-    // Should create type instead of passing "any"
   const [solvingState, setSolvingState] = React.useState<SolvingState>(DEFAULT_SOLVING_STATE);
   const [wordList, setWordList] = React.useState<Array<string>>([]);
   const [wordPointsMap, setWordPointsMap] = React.useState<Map<string, Array<Point>>>(new Map<string, Array<Point>>());
@@ -60,7 +59,6 @@ function MainPage () {
     const { status, data } = event.data;
 
     if (status == 'working') {
-      // const newSolvingState = {status: status, ...data}
       setSolvingState(data);
     } else if (status == 'done') {
       worker.terminate()
