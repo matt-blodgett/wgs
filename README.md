@@ -1,12 +1,14 @@
 # Word Game Solver (wgs)
 
-A React Typescript tool for finding solutions to the word game puzzle "Word Hunt" in the IOS mobile app [GamePigeon](http://gamepigeonapp.com/)
+A hobby project for learning React and Typescript
+
+The project is a React Typescript tool for finding solutions to the word game puzzle "Word Hunt" in the IOS mobile app [GamePigeon](http://gamepigeonapp.com/)
 
 ## The Game
 
 The game is available on IOS and is played through iMessages.
 
-### The rules:
+### The rules
 
 <img src="./docs/game-screen-1.jpg" width=300 />
 
